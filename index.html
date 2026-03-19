@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Khushi's world</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #fdeff2 0%, #fff3e6 100%);
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: pan-y; 
+        }
+
+        #world-container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 40px 40px 24px 24px;
+            box-shadow: 0 20px 30px -10px rgba(255, 140, 170, 0.3);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(2px);
+        }
+
+        .screen {
+            width: 100%;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 600px;
+            transition: opacity 0.4s ease;
+            background: rgba(255, 240, 245, 0.7);
+            border-radius: 40px 40px 0 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* tap screen */
+        #tap-screen {
+            background: radial-gradient(circle at 30% 40%, #ffd0dd, #ffb6c1);
+            text-align: center;
+            cursor: pointer;
+            animation: softGlow 2.2s infinite alternate;
+        }
+
+        @keyframes softGlow {
+            0% { box-shadow: inset 0 0 30px #ffe4ec, 0 10px 20px #fbaac3; }
+            100% { box-shadow: inset 0 0 50px #ffffff, 0 15px 25px #ff90b0; }
+        }
+
+        .heart-tap {
+            font-size: 5rem;
+            filter: drop-shadow(0 8px 12px #ff6380);
+            margin-bottom: 1rem;
+            animation: bounceSoft 2s infinite;
+        }
+
+        @keyframes bounceSoft {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-12px); }
+        }
+
+        .tap-text {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #4a2e35;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0 #fff5f5;
+            background: rgba(255,255,255,0.4);
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+
+        .sub-tap {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #692e3c;
+        }
+
+        /* common journey sections */
+        .journey-section {
+            width: 100%;
+            padding: 28px 16px;
+            text-align: center;
+            border-radius: 48px 48px 0 0;
+            background: rgba(255, 250, 240, 0.7);
+            margin-bottom: 6px;
+            box-shadow: 0 -2px 15px rgba(255, 190, 200, 0.5);
+            transform-origin: bottom;
+        }
+
+        .section-icon {
+            font-size: 3.8rem;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 6px 6px #ffa5b9);
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #d4517c, #bd2f5a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .message-bubble {
+            background: white;
+            border-radius: 40px 40px 40px 10px;
+            padding: 20px 16px;
+            margin: 16px 0 10px;
+            font-size: 1.3rem;
+            line-height: 1.4;
+            color: #4e3b40;
+            box-shadow: 0 10px 0 #ffb8c9, 0 8px 18px #fac0cd;
+            border: 2px solid #ffeef2;
+        }
+
+        /* unique animations per section */
+        .sports-animate {
+            animation: sprintFade 1.2s ease-out;
+        }
+        @keyframes sprintFade {
+            0% { transform: translateX(-30px) scale(0.9); opacity: 0; }
+            40% { transform: translateX(8px) scale(1.02); }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        .academics-animate {
+            animation: smartFlip 1.4s ease;
+        }
+        @keyframes smartFlip {
+            0% { transform: perspective(400px) rotateX(90deg); opacity: 0; }
+            60% { transform: perspective(400px) rotateX(-10deg); }
+            100% { transform: perspective(400px) rotateX(0); opacity: 1; }
+        }
+
+        .art-animate {
+            animation: paintSwirl 1.6s ease-out;
+        }
+        @keyframes paintSwirl {
+            0% { transform: rotate(-5deg) scale(0.7); opacity: 0; }
+            50% { transform: rotate(3deg) scale(1.05); }
+            100% { transform: rotate(0) scale(1); opacity: 1; }
+        }
+
+        .singing-animate {
+            animation: musicalWave 1.5s ease-in-out;
+        }
+        @keyframes musicalWave {
+            0% { transform: translateY(30px) scaleY(1.2); opacity: 0; }
+            70% { transform: translateY(-6px); }
+            100% { transform: translateY(0) scaleY(1); opacity: 1; }
+        }
+
+        .photography-animate {
+            animation: shutterClick 1.2s;
+        }
+        @keyframes shutterClick {
+            0% { filter: brightness(2); transform: scale(0.8); }
+            40% { filter: brightness(1.2); transform: scale(1.02); }
+            100% { filter: brightness(1); transform: scale(1); }
+        }
+
+        .kindness-animate {
+            animation: kindnessGlow 2s infinite alternate;
+        }
+        @keyframes kindnessGlow {
+            0% { text-shadow: 0 0 5px #fbc1c1; }
+            100% { text-shadow: 0 0 20px #ff7b9c, 0 0 30px #ffb3c6; }
+        }
+
+        .confidence-animate {
+            animation: confidenceRise 1.8s;
+        }
+        @keyframes confidenceRise {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.08); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .bright-smile-animate {
+            animation: shineSmile 2.4s infinite;
+        }
+        @keyframes shineSmile {
+            0%,100% { filter: drop-shadow(0 0 6px #ffd966); }
+            50% { filter: drop-shadow(0 0 20px #ffb347); }
+        }
+
+        /* final message */
+        .final-section {
+            background: #ffe7ed;
+            border: 4px dotted #ff99bb;
+        }
+
+        .final-gift {
+            font-size: 2.5rem;
+            background: #fbb0c0;
+            color: #2b1e22;
+            padding: 28px 12px;
+            border-radius: 80px 20px 80px 20px;
+            transform: rotate(-1deg);
+            box-shadow: 0 20px #ba7b8a;
+        }
+
+        /* progress dots */
+        .progress-dots {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 16px 0 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ffb8cb;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #e42f64;
+            transform: scale(1.3);
+            box-shadow: 0 0 12px #ff3b6f;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 36px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #b33b5c;
+            box-shadow: 0 8px 0 #fec5d0, 0 10px 20px #f7a5b9;
+            margin: 16px 0 8px;
+            width: fit-content;
+            transition: 0.05s linear;
+            touch-action: manipulation;
+            cursor: pointer;
+        }
+
+        .nav-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #fec5d0, 0 5px 12px #f7a5b9;
+        }
+
+        .reset-btn {
+            background: #ffdbe4;
+            color: #792842;
+            padding: 10px 24px;
+            border-radius: 60px;
+            border: 2px solid white;
+            font-size: 1.2rem;
+            margin: 10px 0 25px;
+            box-shadow: 0 5px 0 #d48b9f;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="world-container">
+        <!-- screen 0: tap to enter -->
+        <div id="tap-screen" class="screen">
+            <div class="heart-tap">💗✨</div>
+            <div class="tap-text">Tap to Enter</div>
+            <div class="sub-tap">Khushi's world</div>
+            <div style="margin-top: 40px; font-size: 3rem;">🌸</div>
+        </div>
+
+        <!-- main journey container (hidden initially) -->
+        <div id="journey-app" class="hidden">
+            <div id="sections-container"></div>
+            <div class="progress-dots" id="progressDots"></div>
+            <button class="nav-btn" id="nextBtn">continue ✨</button>
+            <button class="reset-btn" id="resetBtn">↺ back to start</button>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // ---------- Khushi's qualities data ----------
+            const sections = [
+                { icon: "⚽🏀", title: "Sports Energy", message: "A volleyball champion, unstoppable & bright.", animation: "sports-animate" },
+                { icon: "📚🧠", title: "Academics", message: "Curious mind, brilliant soul, you shine in every class and phase of life.", animation: "academics-animate" },
+                { icon: "🎨🖌️", title: "Creativity", message: "Every stroke of yours turns the world into art which is not limted to just canvas. The living art. That Krishna-Radha art and bookshelf was amazing!!", animation: "art-animate" },
+                { icon: "🎤🎶", title: "Musical Expression", message: "Your voice is a gentle melody that lingers in hearts. Bas mujhe kabhi gaa kar suna dena! 😁", animation: "singing-animate" },
+                { icon: "📸✨", title: "Photography", message: "You capture magic in skies, making time stand still. A photographer!", animation: "photography-animate" },
+                { icon: "🤝💕", title: "Kindness", message: "Your kindness wraps the world in a warm hug. You care the needy persons. So sweet of you!", animation: "kindness-animate" },
+                { icon: "💪🌟", title: "Confidence", message: "You stand tall like a sunflower, bold and radiant. FEARLESS KHUSHI!", animation: "confidence-animate" },
+                { icon: "😁☀️", title: "Bright Smile", message: "One smile from you could light a thousand skies. So smile please! 😁", animation: "bright-smile-animate" }
+            ];
+
+            // final extra message (emotional + humorous)
+            const finalMessage = "You expected a gift? YOU are the gift. 🎁💫";
+
+            let currentSectionIndex = 0;
+            const container = document.getElementById('sections-container');
+            const dotsContainer = document.getElementById('progressDots');
+            const nextBtn = document.getElementById('nextBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const journeyApp = document.getElementById('journey-app');
+            const tapScreen = document.getElementById('tap-screen');
+
+            // render sections based on index
+            function renderSections() {
+                let html = '';
+                for (let i = 0; i < sections.length; i++) {
+                    const s = sections[i];
+                    const activeClass = (i === currentSectionIndex) ? '' : 'hidden'; 
+                    html += `<div id="section-${i}" class="journey-section ${activeClass} ${s.animation}">
+                        <div class="section-icon">${s.icon}</div>
+                        <div class="section-title">${s.title}</div>
+                        <div class="message-bubble">${s.message}</div>
+                    </div>`;
+                }
+                // final extra section (index = sections.length)
+                const finalActiveClass = (currentSectionIndex === sections.length) ? '' : 'hidden';
+                html += `<div id="final-section" class="journey-section final-section ${finalActiveClass} final-animate">
+                    <div class="section-icon">🎁💖</div>
+                    <div class="final-gift">${finalMessage}</div>
+                </div>`;
+
+                container.innerHTML = html;
+
+                // update dots
+                let dotsHtml = '';
+                for (let i = 0; i <= sections.length; i++) { 
+                    const activeDot = (i === currentSectionIndex) ? 'active' : '';
+                    dotsHtml += `<span class="dot ${activeDot}"></span>`;
+                }
+                dotsContainer.innerHTML = dotsHtml;
+
+                // next button text: if last section, change text
+                if (currentSectionIndex === sections.length) {
+                    nextBtn.textContent = '💖 aw 🥰';
+                } else {
+                    nextBtn.textContent = 'continue ✨';
+                }
+            }
+
+            // go to next section
+            function nextSection() {
+                if (currentSectionIndex < sections.length) {
+                    currentSectionIndex++;
+                } else {
+                    // if final, loop back? we just reset to keep surprise
+                    currentSectionIndex = 0;
+                }
+                renderSections();
+            }
+
+            // reset to beginning (tap screen)
+            function resetToTap() {
+                journeyApp.classList.add('hidden');
+                tapScreen.classList.remove('hidden');
+                currentSectionIndex = 0; 
+            }
+
+            // start journey from tap
+            function startJourney() {
+                journeyApp.classList.remove('hidden');
+                tapScreen.classList.add('hidden');
+                // randomize? no, start from 0
+                currentSectionIndex = 0;
+                renderSections();
+            }
+
+            // event listeners
+            tapScreen.addEventListener('click', startJourney);
+            nextBtn.addEventListener('click', nextSection);
+            resetBtn.addEventListener('click', resetToTap);
+
+            // touch optimizations: no double-tap zoom on buttons
+            nextBtn.addEventListener('touchstart', (e) => { e.preventDefault(); }, { passive: false });
+            resetBtn.addEventListener('touchstart', (e) => { e.preventDefault(); }, { passive: false });
+
+            // optional swipe left/right? not necessary, but clean.
+            let touchStartX = 0;
+            journeyApp.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+
+            journeyApp.addEventListener('touchend', (e) => {
+                if (!touchStartX) return;
+                const diffX = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        // previous? not implemented (just continue) but we can do continue on right swipe
+                        // we map right swipe to continue for easier use
+                        nextSection();
+                    } else {
+                        // left swipe -> also continue (surprise)
+                        nextSection();
+                    }
+                }
+                touchStartX = 0;
+            });
+
+            // also keyboard / accessibility no problem
+
+            // initial state: tap visible
+            tapScreen.classList.remove('hidden');
+            journeyApp.classList.add('hidden');
+
+            // prefill empty container just in case
+            if (container) renderSections(); // but hidden
+
+            // Ensure final section has soft animation
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .final-animate { animation: giftPop 1.8s; }
+                @keyframes giftPop {
+                    0% { transform: scale(0.2) rotate(-10deg); opacity: 0; }
+                    70% { transform: scale(1.1) rotate(2deg); }
+                    100% { transform: scale(1) rotate(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        })();
+    </script>
+</body>
+</html>
